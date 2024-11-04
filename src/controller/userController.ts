@@ -93,6 +93,32 @@ export const login = async (req: Request, res: Response) => {
     res.json({ token });
     return;
 };
+export const salogin = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    // Check if user exists and if password is correct
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+         res.status(401).json({ message: 'Invalid credentials' });
+         return;
+    }
+
+    // Check if the user's role is 'sa'
+    if (user.role !== 'sa') {
+        res.status(403).json({ message: 'Access denied' });
+        return;
+    }
+
+    // Generate token if the role is 'sa'
+    const token = jwt.sign(
+        { id: user.org_id, role: user.role },
+        "petdryfuygiuhi" as string,
+        { expiresIn: '1h' }
+    );
+    
+    res.json({ token });
+};
+
 
 
 export const validateToken = (req: Request, res: Response): void => {
