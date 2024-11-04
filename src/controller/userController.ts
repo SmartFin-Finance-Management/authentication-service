@@ -14,10 +14,11 @@ export const addUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-// Get user by ID
+// Get user by email
 export const getUserDetails = async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.params; // Get email from request parameters
     try {
-        const user = await userService.getUserById(req.params.id);
+        const user = await userService.getUserByEmail(email);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -28,10 +29,11 @@ export const getUserDetails = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// Update user
+// Update user by email
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.params; // Get email from request parameters
     try {
-        const updatedUser = await userService.updateUser(req.params.id, req.body);
+        const updatedUser = await userService.updateUserByEmail(email, req.body);
         if (!updatedUser) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -42,16 +44,16 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-// Delete user
+// Delete user by email
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.params; // Get email from request parameters
     try {
-        const deletedUser = await userService.deleteUser(req.params.id);
+        const deletedUser = await userService.deleteUserByEmail(email);
         if (!deletedUser) {
             res.status(404).json({ message: 'User not found' });
             return;
         }
-        res.status(200).json({ message: 'user removed' });
-        //send();
+        res.status(200).json({ message: 'User removed' });
     } catch (error) {
         res.status(500).json({ message: error instanceof Error ? error.message : 'An unknown error occurred.' });
     }
