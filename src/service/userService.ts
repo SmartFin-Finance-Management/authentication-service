@@ -20,3 +20,7 @@ export const deleteUser = async (userId: string): Promise<IUser | null> => {
 export const getAllUsers = async (): Promise<IUser[]> => {
     return await User.find();
 };
+
+export const getUsersByOrgId=async(orgId:number)=>{
+    return await User.find({org_id:orgId});
+}
