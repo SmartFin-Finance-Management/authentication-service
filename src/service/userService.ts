@@ -5,18 +5,25 @@ export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
     return await user.save();
 };
 
-export const getUserById = async (userId: string): Promise<IUser | null> => {
-    return await User.findById(userId);
+// Get user by email
+export const getUserByEmail = async (email: string): Promise<IUser | null> => {
+    return await User.findOne({ email });
 };
 
-export const updateUser = async (userId: string, updateData: Partial<IUser>): Promise<IUser | null> => {
-    return await User.findByIdAndUpdate(userId, updateData, { new: true });
+// Update user by email
+export const updateUserByEmail = async (email: string, updateData: Partial<IUser>): Promise<IUser | null> => {
+    return await User.findOneAndUpdate({ email }, updateData, { new: true });
 };
 
-export const deleteUser = async (userId: string): Promise<IUser | null> => {
-    return await User.findByIdAndDelete(userId);
+// Delete user by email
+export const deleteUserByEmail = async (email: string): Promise<IUser | null> => {
+    return await User.findOneAndDelete({ email });
 };
 
 export const getAllUsers = async (): Promise<IUser[]> => {
     return await User.find();
 };
+
+export const getUsersByOrgId=async(orgId:number)=>{
+    return await User.find({org_id:orgId});
+}
