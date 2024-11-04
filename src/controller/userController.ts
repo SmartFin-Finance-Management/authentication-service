@@ -89,7 +89,7 @@ export const login = async (req: Request, res: Response) => {
     }
     const token = jwt.sign({ id: user.org_id, role: user.role }, "petdryfuygiuhi" as string, { expiresIn: '1h' });
     res.json({ token });
-    return;
+    return; 
 };
 
 
