@@ -90,7 +90,7 @@ export const login = async (req: Request, res: Response) => {
          return;
     }
     const token = jwt.sign({ id: user.org_id, role: user.role }, "petdryfuygiuhi" as string, { expiresIn: '1h' });
-    res.json({ token });
+    res.json({ token ,org_id:user.org_id });
     return; 
 };
 export const salogin = async (req: Request, res: Response) => {
@@ -116,7 +116,7 @@ export const salogin = async (req: Request, res: Response) => {
         { expiresIn: '1h' }
     );
     
-    res.json({ token });
+    res.json({ token});
 };
 
 
