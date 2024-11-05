@@ -33,7 +33,9 @@ export const getUserDetails = async (req: Request, res: Response): Promise<void>
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
     const { email } = req.params; // Get email from request parameters
     try {
+
         const updatedUser = await userService.updateUserByEmail(email, req.body);
+
         if (!updatedUser) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -74,12 +76,12 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 
 export const register = async (req: Request, res: Response) => {
-    const { org_id,username, email, password, role } = req.body;
+    const { org_id, username, email, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ org_id,username, email, password: hashedPassword, role });
+    const newUser = new User({ org_id, username, email, password: hashedPassword, role });
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully' });
-    return ;
+    return;
 };
 
 
@@ -87,12 +89,12 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
-         res.status(401).json({ message: 'Invalid credentials' });
-         return;
+        res.status(401).json({ message: 'Invalid credentials' });
+        return;
     }
     const token = jwt.sign({ id: user.org_id, role: user.role }, "petdryfuygiuhi" as string, { expiresIn: '1h' });
-    res.json({ token ,org_id:user.org_id });
-    return; 
+    res.json({ token, org_id: user.org_id });
+    return;
 };
 export const salogin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -100,8 +102,8 @@ export const salogin = async (req: Request, res: Response) => {
 
     // Check if user exists and if password is correct
     if (!user || !(await bcrypt.compare(password, user.password))) {
-         res.status(401).json({ message: 'Invalid credentials' });
-         return;
+        res.status(401).json({ message: 'Invalid credentials' });
+        return;
     }
 
     // Check if the user's role is 'sa'
@@ -116,8 +118,8 @@ export const salogin = async (req: Request, res: Response) => {
         "petdryfuygiuhi" as string,
         { expiresIn: '1h' }
     );
-    
-    res.json({ token});
+
+    res.json({ token });
 };
 
 
@@ -126,8 +128,8 @@ export const validateToken = (req: Request, res: Response): void => {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-         res.status(401).json({ message: 'Access token required' });
-         return;
+        res.status(401).json({ message: 'Access token required' });
+        return;
     }
 
     jwt.verify(token, "petdryfuygiuhi" as string, (err, decoded) => {

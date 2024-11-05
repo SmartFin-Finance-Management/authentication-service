@@ -1,4 +1,5 @@
 import User, { IUser } from '../models/userModel';
+import bcrypt from 'bcryptjs'
 
 export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
     const user = new User(userData);
@@ -12,6 +13,9 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
 
 // Update user by email
 export const updateUserByEmail = async (email: string, updateData: Partial<IUser>): Promise<IUser | null> => {
+    if (updateData.password) {
+        updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
     return await User.findOneAndUpdate({ email }, updateData, { new: true });
 };
 
@@ -24,6 +28,6 @@ export const getAllUsers = async (): Promise<IUser[]> => {
     return await User.find();
 };
 
-export const getUsersByOrgId=async(orgId:number)=>{
-    return await User.find({org_id:orgId});
+export const getUsersByOrgId = async (orgId: number) => {
+    return await User.find({ org_id: orgId });
 }
