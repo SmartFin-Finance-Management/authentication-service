@@ -74,7 +74,6 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 // controllers/authController.ts
 
-
 export const register = async (req: Request, res: Response) => {
     const { org_id, username, email, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
